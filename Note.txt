@@ -36,6 +36,7 @@ Now,
 create a store using the createStore() function from the redux library. The createStore() function takes a reducer function as an argument and
 returns a store object.
 
+We can use subscribe() method of the store to listen to the changes (console it) every time when some actions are performed. The subscribe() method takes a callback function as an argument,
 
 Here’s a summary of the key concepts in Redux:
 
