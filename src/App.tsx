@@ -1,35 +1,60 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Cart from './components/Cart';
+import { useDispatch } from 'react-redux';
+import products from './data/product.json';
+import { addItem, removeItem } from './slices/cartSlice';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+export type CardProps = {
+    id: number;
+    image: string;
+    productName: string;
+    price: number;
+};
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+type itemProp = Array<CardProps>;
+
+const Card = ({ id, image, productName, price }: CardProps) => {
+    const dispatch = useDispatch();
+
+    return (
+        <div className="card">
+            <img className="image" src={image} alt="product" />
+            <h1>{productName}</h1>
+            <h1>Price: {price}</h1>
+            <button 
+                onClick={
+                    () => dispatch(
+                        addItem({ id, image, productName, price})
+                    )
+                }
+            >
+                Add to Cart
+            </button>
+            <button 
+                onClick={() => dispatch(
+                        removeItem({ id })
+                    )
+                }
+            >
+                Remove
+            </button>
+        </div>
+    );
+};
+
+export default function App() {
+    const card: itemProp = products;
+
+    return (
+        <div className="App">
+            <Cart />
+            <div className="card-container">
+                {card.map(
+                    (item: CardProps): React.ReactElement => (
+                        <Card key={item?.id} {...item} />
+                    )
+                )}
+            </div>
+        </div>
+    );
 }
-
-export default App
